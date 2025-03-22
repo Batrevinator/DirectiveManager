@@ -1,0 +1,48 @@
+.App {
+  padding: 15px;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+/* Hide scrollbar for Chrome, Safari, and Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge, and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.card {
+  margin: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  width: 300px;
+  min-height: 150px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.header {
+  border-bottom: 1px solid #e0e0e0;
+  border-radius: 10px 10px 0 0;
+  padding: 10px 15px;
+  background-color: #f0f8ff;
+  text-align: center;
+  font-weight: 600;
+  min-height: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+
+.content {
+  padding: 5px 10px;
+}
+

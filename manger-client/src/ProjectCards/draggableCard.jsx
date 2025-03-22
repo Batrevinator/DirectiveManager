@@ -1,13 +1,21 @@
-import Draggable from 'react-draggable';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { Button, ButtonGroup, Card, Col } from 'reactstrap';
+import { IoIosArrowUp } from "react-icons/io";
 
 const ButtonMobilityCard = (props) => {
   return (
-      <div className="card">
+      <Card>
         <div className="header">{props.title}</div>
         <div className="content">
-          <input className="Button"></input>
+          <Col>
+            <ButtonGroup vertical="true">
+              <Button> <IoIosArrowUp/> </Button>
+              <Button> </Button>
+            </ButtonGroup>
+          </Col>
         </div>
-      </div>
+      </Card>
   )
 }
 export default ButtonMobilityCard;

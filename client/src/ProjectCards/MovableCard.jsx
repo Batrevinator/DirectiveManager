@@ -2,9 +2,17 @@ import React from 'react';
 import { Card, CardHeader, CardBody, ButtonGroup, Button, Col, Row } from 'reactstrap';
 import { IoIosArrowUp,  IoIosArrowDown} from "react-icons/io";
 
-const ButtonMobilityCard = ({color, title, key}) => {
+function handleMoveUp(callback){
+  callback('up')
+}
+
+function handleMoveDown(callback){
+  callback('down')
+}
+
+const ButtonMobilityCard = ({color, title, move}) => {
   return (
-    <div style={{ margin: '20px auto' }}>
+    <div style={{ margin: '5px auto' }}>
       <Card
         style={{
           width: '400px', // Fixed width
@@ -24,14 +32,14 @@ const ButtonMobilityCard = ({color, title, key}) => {
         >
           <Row style={{alignItems: 'center'}}>
             <Col xs={{size: 5, offset: 3}}>
-              Card Header
+              {title}
             </Col>
-            <Col xs={{size: 1, offset: 2}}>
+            <Col style={{height:"100%"}} xs={{size: 1, offset: 2}}>
               <ButtonGroup vertical>
-                <Button size='sm' style={{width:"50px"}}>
+                <Button onClick={(key) => handleMoveUp(move)} size='sm' style={{height: "30px", width:"50px"}}>
                   <IoIosArrowUp/>
                 </Button>
-                <Button size='sm' style={{width:"50px"}}>
+                <Button onClick={(key) => handleMoveDown(move)} size='sm' style={{height: "30px",width:"50px"}}>
                   <IoIosArrowDown/>
                 </Button>
               </ButtonGroup>

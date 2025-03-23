@@ -1,16 +1,31 @@
 import React from 'react';
+import { Card, CardHeader, CardBody, ButtonGroup, Button, Col, Row, CardTitle } from 'reactstrap';
 
-const HorizontalScrollContainer = ({ children }) => {
+const HorizontalScrollContainer = ({ children, title }) => {
   return (
-    <div className= "hide-scrollbar" style={{ 
+    <Card className= "hide-scrollbar" style={{ 
       display: 'flex', // Ensure a horizontal layout
-        overflowX: 'auto', // Enable horizontal scrolling if content overflows
-        maxHeight: '500px', // Prevent vertical growth
-        border: '1px solid #ccc',
-        padding: '10px',
+      overflowX: 'auto', // Enable horizontal scrolling if content overflows
+      overflowY: 'hidden',
+      maxHeight: '300px', // Prevent vertical growth
+      border: '1px solid #ccc',
+      padding: '10px',
     }}>
-      {children}
-    </div>
+      <CardHeader style={{backgroundColor: "white"}}>
+        <CardTitle style={{fontWeight: 'bold', fontSize: 20}}>
+          {title}
+        </CardTitle>
+      </CardHeader>
+      <CardBody style={{ 
+      display: 'flex', // Ensure a horizontal layout
+      overflowX: 'auto', // Enable horizontal scrolling if content overflows
+      overflowY: 'hidden',
+      maxHeight: '300px', // Prevent vertical growth
+
+    }}>
+        {children}
+      </CardBody>
+    </Card>
   );
 };
 

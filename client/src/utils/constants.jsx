@@ -1,0 +1,1 @@
+export var BaseUrl = "http://localhost:5000/";

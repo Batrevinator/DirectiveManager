@@ -7,7 +7,7 @@ const HorizontalScrollContainer = ({ children, title }) => {
       display: 'flex', // Ensure a horizontal layout
       overflowX: 'auto', // Enable horizontal scrolling if content overflows
       overflowY: 'hidden',
-      maxHeight: '300px', // Prevent vertical growth
+      height: '280px', // Prevent vertical growth
       border: '1px solid #ccc',
       padding: '10px',
     }}>

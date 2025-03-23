@@ -31,18 +31,18 @@ const ButtonMobilityCard = ({color, title, move}) => {
           }}
         >
           <Row style={{alignItems: 'center'}}>
-            <Col xs={{size: 5, offset: 3}}>
-              {title}
-            </Col>
-            <Col style={{height:"100%"}} xs={{size: 1, offset: 2}}>
+          <Col style={{height:"100%"}} xs={{size: 3, offset: 0}}>
               <ButtonGroup vertical>
-                <Button onClick={(key) => handleMoveUp(move)} size='sm' style={{height: "30px", width:"50px"}}>
+                <Button onClick={(key) => handleMoveUp(move)} size='sm' style={{height: "30px", width:"60px"}}>
                   <IoIosArrowUp/>
                 </Button>
-                <Button onClick={(key) => handleMoveDown(move)} size='sm' style={{height: "30px",width:"50px"}}>
+                <Button onClick={(key) => handleMoveDown(move)} size='sm' style={{height: "30px",width:"60px"}}>
                   <IoIosArrowDown/>
                 </Button>
               </ButtonGroup>
+            </Col>
+            <Col xs={{size: 5, offset: 0}}>
+              {title}
             </Col>
           </Row>
         </CardHeader>

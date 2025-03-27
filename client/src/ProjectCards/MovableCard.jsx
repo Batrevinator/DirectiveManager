@@ -10,7 +10,7 @@ function handleMoveDown(callback){
   callback('down')
 }
 
-const ButtonMobilityCard = ({color, title, move}) => {
+const ButtonMobilityCard = ({color, title, description, move, board_link}) => {
   return (
     <div style={{ margin: '5px auto' }}>
       <Card
@@ -54,7 +54,9 @@ const ButtonMobilityCard = ({color, title, move}) => {
             textAlign: 'justify',
           }}
         >
-          <p>This is the main content inside the card body.</p>
+          <p style={{ fontWeight: 'bold' }}>Description:</p>
+          <p>{description}</p>
+          <a style={{ fontWeight: 'bold' }} href={board_link}> Board Link </a>
         </CardBody>
       </Card>
     </div>

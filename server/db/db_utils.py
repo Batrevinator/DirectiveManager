@@ -46,7 +46,6 @@ def exec_get_one(sql, args={}):
 
 def exec_get_all(sql, args={}):
     conn = connect()
-    print(conn)
     cur = conn.cursor()
     cur.execute(sql, args)
     # https://www.psycopg.org/docs/cursor.html#cursor.fetchall
@@ -92,7 +91,7 @@ def format_directives(cards):
         formated_directives[card[2]].append({
             "name": card[0],
             "description": card[1],
-            "id": card[3]
+            "link": card[3],
+            "id": card[4]
         })
-    print(formated_directives)
     return json.dumps(formated_directives)

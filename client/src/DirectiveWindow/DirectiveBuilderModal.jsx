@@ -2,7 +2,7 @@ import ButtonMobilityCard from '../ProjectCards/MovableCard';
 import {React, Component} from 'react';
 import HorizontalScrollContainer from './HorizontalScrollContainer';
 import { BaseUrl } from '../utils/constants';
-import { Modal, Input, Form, Button, CardHeader, Card, CardBody, Label, Col, Row } from 'reactstrap';
+import { Modal, Input, Form, Button, CardHeader, Card, CardBody, Label, Col, Row, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { IoMdClose } from "react-icons/io";
 
 class DirectiveBuilderModal extends Component{
@@ -12,6 +12,8 @@ class DirectiveBuilderModal extends Component{
           name : '',
           description: '',
           priority: '',
+          link: '',
+          dropdownOpen: false
         };
     }
 
@@ -24,11 +26,18 @@ class DirectiveBuilderModal extends Component{
     handlePriorityChange = (event) => {
         this.setState({priority: event.target.value});
     }
+    handleLinkChange = (event) => {
+        this.setState({link: event.target.value});
+    }
+
+    toggleDropdown = () => {
+        this.setState({dropdownOpen: !this.state.dropdownOpen});
+    }
 
     submit = (event) => {
         event.preventDefault();
-        const { name, description, priority } = this.state;
-        this.props.addCard(priority, name, description);
+        const { name, description, priority, link } = this.state;
+        this.props.addCard(priority, name, description, link);
         this.props.toggle();
     }
 
@@ -59,8 +68,20 @@ class DirectiveBuilderModal extends Component{
                                     <Input type="textarea" name="directiveDescription" placeholder="Directive Description" onChange={this.handleDescriptionChange} />
                                 </Row>
                                 <Row>
+                                    <Label for="directiveLink">Link:</Label>
+                                    <Input type="textarea" name="directiveLink" placeholder="Directive Link" onChange={this.handleLinkChange} />
+                                </Row>
+                                <Row>
                                     <Label for="directivePriority">Priority:</Label>
-                                    <Input type="text" name="directivePriority" placeholder="Directive Priority" onChange={this.handlePriorityChange} />
+                                    <Dropdown name = "directivePriority" isOpen={this.state.dropdownOpen} toggle={this.toggleDropdown}>
+                                        <DropdownToggle caret>{this.state.priority.charAt(0).toUpperCase() + this.state.priority.slice(1) || "Priority" }</DropdownToggle>
+                                        <DropdownMenu>
+                                            <DropdownItem onClick={(e) => this.handlePriorityChange(e)} value = "low">Low</DropdownItem>
+                                            <DropdownItem onClick={(e) => this.handlePriorityChange(e)} value = "medium">Medium</DropdownItem>
+                                            <DropdownItem onClick={(e) => this.handlePriorityChange(e)} value = "high">High</DropdownItem>
+                                            <DropdownItem onClick={(e) => this.handlePriorityChange(e)} value = "urgent">Urgent</DropdownItem>
+                                        </DropdownMenu>
+                                    </Dropdown>
                                 </Row>
                                 <Row style={{marginTop: '10px'}}>
                                     <Button color='primary' onClick={this.submit}>Submit</Button>

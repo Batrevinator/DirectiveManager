@@ -1,11 +1,12 @@
--- DROP TABLE IF EXISTS card CASCADE;
--- DROP TABLE IF EXISTS directive CASCADE;
+DROP TABLE IF EXISTS card CASCADE;
+DROP TABLE IF EXISTS directive CASCADE;
 
 CREATE TABLE directive (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
     priority VARCHAR(50) DEFAULT 'low',
+    link VARCHAR(50) DEFAULT 'Please provide a link',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT priorityLoc CHECK (priority IN ('low', 'medium', 'high', 'urgent'))

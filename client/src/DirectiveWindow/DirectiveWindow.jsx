@@ -1,63 +1,55 @@
 import ButtonMobilityCard from '../ProjectCards/MovableCard';
-import {React, Component} from 'react';
+import {React, Component, useState, useEffect} from 'react';
 import HorizontalScrollContainer from './HorizontalScrollContainer';
 import { BaseUrl } from '../utils/constants';
 import { Button, Col, Label, Row } from 'reactstrap';
 import DirectiveBuilderModal from './DirectiveBuilderModal';
 
-class DirectiveWindow extends Component{
-    constructor(props) {
-        super(props);
-        this.priorityOrder = ['urgent', 'high', 'medium', 'low'];
-        this.state = {
-          builderOpen: false,
-          cards: {
-            "urgent": [
-              { "title": "Foo", "id": 0 },
-              { "title": "Quux", "id": 4 }
+function DirectiveWindow(){
+        const priorityOrder = ['urgent', 'high', 'medium', 'low'];
+        const [builderOpen, setBuilderOpen] = useState(false);
+        const [cards, setCards] = useState({
+            urgent: [
             ],
-            "high": [
-              { "title": "Bar", "id": 1 },
-              { "title": "Corge", "id": 5 }
+            high: [
             ],
-            "medium": [
-              { "title": "Baz", "id": 2 },
-              { "title": "Grault", "id": 6 }
+            medium: [
             ],
-            "low": [
-              { "title": "Qux", "id": 3 },
-              { "title": "Garply", "id": 7 }
+            low: [
             ]
-          },
-        };
+          });
+
+    useEffect(() => {
+        getCards();
+    }, []);
+    
+
+    const toggleBuilder = () => {
+        setBuilderOpen(!builderOpen);
     }
 
-    toggleBuilder = () => {
-      this.setState({builderOpen: !this.state.builderOpen})
-    }
-
-    async getCards(cardId = null) {
+    async function getCards(cardId = null) {
       let criteria = (cardId != null) ? '?cardId=' + cardId : '';
       console.log(criteria)
       const response = await fetch(BaseUrl + 'card_access' + criteria, {
         method: 'GET'
       })
       if (response.ok) {
-        const data = await response.json()["cards"];
-        // this.setState({cards: data})
+        const data = await response.json();
+        console.log(data.cards)
+        setCards(JSON.parse(data.cards))
       } else {
         console.error("Failed to fetch cards.");
       }
     }
 
-    async addCard(priority, name, description) {
-      console.log(priority, name, description)
+    async function addCard(priority, name, description, link) {
       const response = await fetch(BaseUrl + 'card_access', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({'priority': priority, 'name': name, 'description': description}),
+        body: JSON.stringify({'priority': priority, 'name': name, 'description': description, 'link': link}),
       })
       if (response.ok) {
         console.log("Card added successfully.");
@@ -66,7 +58,7 @@ class DirectiveWindow extends Component{
       }
     }
 
-    async updateCardPriorityDB(cardId, newPriority) {
+    async function updateCardPriorityDB(cardId, newPriority) {
       const response = await fetch (BaseUrl+'card_access', {
         method: 'PUT',
         headers: {
@@ -82,9 +74,10 @@ class DirectiveWindow extends Component{
       }
     }
     
-    updatePriority(movement, cardId, previousPriorityIndex) {
-      let cardsTemp = this.state.cards;
-      const taskIndex = cardsTemp[this.priorityOrder[previousPriorityIndex]].findIndex(cardsTemp => cardsTemp.id === cardId);
+    const updatePriority = (movement, cardId, previousPriorityIndex) => {
+      getCards();
+      let cardsTemp = cards;
+      const taskIndex = cardsTemp[priorityOrder[previousPriorityIndex]].findIndex(cardsTemp => cardsTemp.id === cardId);
   
       if (taskIndex === -1) {
           console.error("Task not found in the specified priority group.");
@@ -93,41 +86,41 @@ class DirectiveWindow extends Component{
   
       if(movement === 'up'){
           if(previousPriorityIndex > 0){
-              const [card] = cardsTemp[this.priorityOrder[previousPriorityIndex]].splice(taskIndex, 1);
-              cardsTemp[this.priorityOrder[previousPriorityIndex-1]].push(card);
+              const [card] = cardsTemp[priorityOrder[previousPriorityIndex]].splice(taskIndex, 1);
+              cardsTemp[priorityOrder[previousPriorityIndex-1]].push(card);
+              updateCardPriorityDB(cardId, priorityOrder[previousPriorityIndex-1]);
           }
       }else if(movement == 'down'){
           if(previousPriorityIndex < 3){
-              const [card] = cardsTemp[this.priorityOrder[previousPriorityIndex]].splice(taskIndex, 1);
-              cardsTemp[this.priorityOrder[previousPriorityIndex+1]].push(card);
+              const [card] = cardsTemp[priorityOrder[previousPriorityIndex]].splice(taskIndex, 1);
+              cardsTemp[priorityOrder[previousPriorityIndex+1]].push(card);
+              updateCardPriorityDB(cardId, priorityOrder[previousPriorityIndex+1]);
           }
       }
-      this.setState({cards: cardsTemp})
+      setCards(cardsTemp);
     }
 
-    render(){
     return (
         <div>
-          <DirectiveBuilderModal addCard = {this.addCard} isOpen={this.state.builderOpen} toggle={this.toggleBuilder}/>
+          <DirectiveBuilderModal addCard = {addCard} isOpen={builderOpen} toggle={toggleBuilder}/>
           <Row>
             <Col xs={{size: 3}} className="text-center my-3">
               <Label style={{fontSize: 30, fontWeight: "bold"}}>Directive Manager</Label>
             </Col>
             <Col xs={{size: 3, offset: 6}} className="text-center my-3">
-              <Button size='lg' color='primary' onClick={this.toggleBuilder}>
+              <Button size='lg' color='primary' onClick={toggleBuilder}>
                 Add New Directive
               </Button>
             </Col>
           </Row>
           <Row>
-                <HorizontalScrollContainer title="Urgent" children={this.state.cards["urgent"].map((card) => <div className='col-md-4'><ButtonMobilityCard move= {(movement) => this.updatePriority(movement, card.id, 0)} color={'#eb4034'} title = {card.title} key={card.id} /></div>)}/>
-                <HorizontalScrollContainer title="High Priority" children={this.state.cards["high"].map((card) => <div className='col-md-4'><ButtonMobilityCard move= {(movement) => this.updatePriority(movement, card.id, 1)} color={'#ebe534'} title={card.title} key={card.id} /></div>)}/>
-                <HorizontalScrollContainer title="Medium Prioritiy" children={this.state.cards["medium"].map((card) => <div className='col-md-4'><ButtonMobilityCard move= {(movement) => this.updatePriority(movement, card.id, 2)} color={'#03fc77'} title={card.title} key={card.id} /></div>)}/>
-                <HorizontalScrollContainer title="Low Prioritiy" children={this.state.cards["low"].map((card) => <div className='col-md-4'><ButtonMobilityCard move= {(movement) => this.updatePriority(movement, card.id, 3)} color={'#348feb'} title={card.title} key={card.id} /></div>)}/>
+                <HorizontalScrollContainer title="Urgent" children={cards.urgent.map((card) => <div className='col-md-4'><ButtonMobilityCard move= {(movement) => updatePriority(movement, card.id, 0)} color={'#eb4034'} board_link = {card.link} description = {card.description} title = {card.name} key={card.id} /></div>)}/>
+                <HorizontalScrollContainer title="High Priority" children={cards.high.map((card) => <div className='col-md-4'><ButtonMobilityCard move= {(movement) => updatePriority(movement, card.id, 1)} color={'#ebe534'} board_link = {card.link} description = {card.description} title = {card.name} key={card.id} /></div>)}/>
+                <HorizontalScrollContainer title="Medium Prioritiy" children={cards.medium.map((card) => <div className='col-md-4'><ButtonMobilityCard move= {(movement) => updatePriority(movement, card.id, 2)} color={'#03fc77'} board_link = {card.link} description = {card.description} title = {card.name} key={card.id} /></div>)}/>
+                <HorizontalScrollContainer title="Low Prioritiy" children={cards.low.map((card) => <div className='col-md-4'><ButtonMobilityCard move= {(movement) => updatePriority(movement, card.id, 3)} color={'#348feb'} board_link = {card.link} description = {card.description} title = {card.name} key={card.id} /></div>)}/>
           </Row>
         </div>
         )
-    }
-}
+  }
 
 export default DirectiveWindow;

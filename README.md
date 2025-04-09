@@ -13,6 +13,11 @@ Companies and products are much larger than a single swim-lane planner this syst
 Within the system you can add a new directive and provide it information listed in the modal. <br>
 To move cards in priority DOUBLE CLICK the arrows on the card (I couldn't be bothered to solve another React useState problem)<br>
 
+## What Is This?
+I recently felt like starting a project that would allow higher level organization of project management tools like Trello.<br>
+This system allows users to create and manage the priority of their Trello projects.<br>
+With some further development I hope to make the system provide more information about the Trello boards through API integration.
+
 ### Future Update Goals
 
 1. Fix the useState problem in the card priority selection.
